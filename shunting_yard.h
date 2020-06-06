@@ -2,6 +2,6 @@
 
 #include <vector>
 #include <string>
-#include "token.h"
+#include "TreeNode.h"
 
-std::vector<Token*> parse(const std::string& expression);
+TreeNode parse(const std::string& expression);

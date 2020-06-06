@@ -2,12 +2,12 @@
 #include <string>
 #include "token.h"
 #include "stack.h"
+#include "TreeNode.h"
+#include "shunting_yard.h"
 
 using namespace std;
 
 const char NOT_FOUND = -1;
-
-typedef int TreeNode; // temporary
 
 bool shouldParseAsOperator(const string &expression, int position);
 
@@ -28,7 +28,9 @@ TreeNode parse(const string &expression) {
                 auto operFromStack = dynamic_cast<Operator *>(operatorStack.peek());
                 if (oper->getPrecedence() > operFromStack->getPrecedence()) break;
 
-                //output.push_back(operatorStack.pop());
+                auto expr2 = expressionStack.pop();
+                auto expr1 = expressionStack.pop();
+                expressionStack.push(OperatorNode(operFromStack, expr1, expr2));
             }
             operatorStack.push(oper);
         } else if (c == '(') {
@@ -37,7 +39,9 @@ TreeNode parse(const string &expression) {
             while (!operatorStack.empty()) {
                 auto token = operatorStack.pop();
                 if (token->isOperator()) {
-                    //output.push_back(token);
+                    auto expr2 = expressionStack.pop();
+                    auto expr1 = expressionStack.pop();
+                    expressionStack.push(OperatorNode(token, expr1, expr2));
                 } else break;
             }
         } else {
@@ -46,8 +50,7 @@ TreeNode parse(const string &expression) {
 
             double number = stod(expression.substr(start, i - start));
             auto token = new Number(number);
-            //output.push_back(token);
-
+            expressionStack.push(ConstantNode(token));
             i--;
         }
     }
