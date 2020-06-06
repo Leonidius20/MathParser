@@ -12,9 +12,6 @@ class StatementListNode : public TreeNode {
 };
 
 class ExpressionNode : public TreeNode {
-
-public:
-    virtual double evaluate() = 0; // TODO: generate implementations
 };
 
 class OperatorNode : public ExpressionNode {
@@ -23,7 +20,8 @@ class OperatorNode : public ExpressionNode {
     const Operator oper;
 
 public:
-    explicit OperatorNode(const Operator &oper) : oper(oper) {};
+    OperatorNode(const Operator &oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
+                                                                                      right(right) {};
 };
 
 class VariableNode : public ExpressionNode {
@@ -34,10 +32,10 @@ public:
 };
 
 class ConstantNode : public ExpressionNode {
-    const Number value;
+    const Number *value;
 
 public:
-    explicit ConstantNode(const Number &value) : value(value) {};
+    explicit ConstantNode(const Number *value) : value(value) {};
 };
 
 class AssigmentNode : public TreeNode {
