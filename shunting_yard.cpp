@@ -7,11 +7,13 @@ using namespace std;
 
 const char NOT_FOUND = -1;
 
+typedef int TreeNode; // temporary
+
 bool shouldParseAsOperator(const string &expression, int position);
 
-vector<Token *> parse(const string &expression) {
-    vector<Token *> output;
-    Stack<Token *> stack;
+TreeNode parse(const string &expression) {
+    Stack<TreeNode *> expressionStack;
+    Stack<Token *> operatorStack;
 
     for (int i = 0; i < expression.length(); i++) {
         char c = expression[i];
@@ -19,23 +21,23 @@ vector<Token *> parse(const string &expression) {
 
         if (shouldParseAsOperator(expression, i)) {
             auto oper = Operator::get(c);
-            while (!stack.empty()) {
-                auto token = stack.peek();
+            while (!operatorStack.empty()) {
+                auto token = operatorStack.peek();
                 if (!token->isOperator()) break;
 
-                auto operFromStack = dynamic_cast<Operator *>(stack.peek());
+                auto operFromStack = dynamic_cast<Operator *>(operatorStack.peek());
                 if (oper->getPrecedence() > operFromStack->getPrecedence()) break;
 
-                output.push_back(stack.pop());
+                //output.push_back(operatorStack.pop());
             }
-            stack.push(oper);
+            operatorStack.push(oper);
         } else if (c == '(') {
-            stack.push(OpeningBracket::getInstance());
+            operatorStack.push(OpeningBracket::getInstance());
         } else if (c == ')') {
-            while (!stack.empty()) {
-                auto token = stack.pop();
+            while (!operatorStack.empty()) {
+                auto token = operatorStack.pop();
                 if (token->isOperator()) {
-                    output.push_back(token);
+                    //output.push_back(token);
                 } else break;
             }
         } else {
@@ -44,17 +46,18 @@ vector<Token *> parse(const string &expression) {
 
             double number = stod(expression.substr(start, i - start));
             auto token = new Number(number);
-            output.push_back(token);
+            //output.push_back(token);
 
             i--;
         }
     }
 
-    while (!stack.empty()) {
-        output.push_back(stack.pop());
+    while (!operatorStack.empty()) {
+        //output.push_back(operatorStack.pop());
     }
 
-    return output;
+    //return output;
+    return 0;
 }
 
 bool shouldParseAsOperator(const string &expression, int position) {
