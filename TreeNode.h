@@ -38,7 +38,7 @@ public:
     explicit ConstantNode(const Number *value) : value(value) {};
 };
 
-class AssigmentNode : public TreeNode {
+class AssignmentNode : public TreeNode {
     VariableNode *variable;
     ExpressionNode *expression;
 };
