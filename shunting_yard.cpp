@@ -41,7 +41,7 @@ TreeNode *parse(const string &expression) {
                 if (token->isOperator()) {
                     auto expr2 = expressionStack.pop();
                     auto expr1 = expressionStack.pop();
-                    expressionStack.push(new OperatorNode(token, expr1, expr2));
+                    expressionStack.push(new OperatorNode(dynamic_cast<Operator *>(token), expr1, expr2));
                 } else break;
             }
         } else {
