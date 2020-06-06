@@ -12,9 +12,6 @@ class StatementListNode : public TreeNode {
 };
 
 class ExpressionNode : public TreeNode {
-
-public:
-    virtual double evaluate() = 0; // TODO: generate implementations
 };
 
 class OperatorNode : public ExpressionNode {
