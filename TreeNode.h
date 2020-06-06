@@ -34,10 +34,10 @@ public:
 };
 
 class ConstantNode : public ExpressionNode {
-    const Number value;
+    const Number *value;
 
 public:
-    explicit ConstantNode(const Number &value) : value(value) {};
+    explicit ConstantNode(const Number *value) : value(value) {};
 };
 
 class AssigmentNode : public TreeNode {
