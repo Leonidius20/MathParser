@@ -23,7 +23,8 @@ class OperatorNode : public ExpressionNode {
     const Operator oper;
 
 public:
-    explicit OperatorNode(const Operator &oper) : oper(oper) {};
+    OperatorNode(const Operator &oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
+                                                                                      right(right) {};
 };
 
 class VariableNode : public ExpressionNode {
