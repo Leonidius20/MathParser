@@ -30,7 +30,7 @@ TreeNode *parse(const string &expression) {
 
                 auto expr2 = expressionStack.pop();
                 auto expr1 = expressionStack.pop();
-                expressionStack.push(OperatorNode(operFromStack, expr1, expr2));
+                expressionStack.push(new OperatorNode(operFromStack, expr1, expr2));
             }
             operatorStack.push(oper);
         } else if (c == '(') {
@@ -41,7 +41,7 @@ TreeNode *parse(const string &expression) {
                 if (token->isOperator()) {
                     auto expr2 = expressionStack.pop();
                     auto expr1 = expressionStack.pop();
-                    expressionStack.push(OperatorNode(token, expr1, expr2));
+                    expressionStack.push(new OperatorNode(token, expr1, expr2));
                 } else break;
             }
         } else {
@@ -50,7 +50,7 @@ TreeNode *parse(const string &expression) {
 
             double number = stod(expression.substr(start, i - start));
             auto token = new Number(number);
-            expressionStack.push(ConstantNode(token));
+            expressionStack.push(new ConstantNode(token));
             i--;
         }
     }
@@ -58,10 +58,15 @@ TreeNode *parse(const string &expression) {
     while (!operatorStack.empty()) {
          auto expr2 = expressionStack.pop();
          auto expr1 = expressionStack.pop();
-         expressionStack.push(OperatorNode(operatorStack.pop(), expr1, expr2));
+         expressionStack.push(new OperatorNode(operatorStack.pop(), expr1, expr2));
     }
 
-    return expressionStack.pop(); // there must be only 1 element by now
+    auto output = expressionStack.pop(); // there must be only 1 element by now
+    if (!expressionStack.empty()) {
+        throw logic_error("Expression stack is not empty");
+    }
+
+    return output;
 }
 
 bool shouldParseAsOperator(const string &expression, int position) {
