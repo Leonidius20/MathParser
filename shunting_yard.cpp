@@ -11,7 +11,7 @@ const char NOT_FOUND = -1;
 
 bool shouldParseAsOperator(const string &expression, int position);
 
-TreeNode parse(const string &expression) {
+TreeNode *parse(const string &expression) {
     Stack<TreeNode *> expressionStack;
     Stack<Token *> operatorStack;
 
@@ -56,11 +56,12 @@ TreeNode parse(const string &expression) {
     }
 
     while (!operatorStack.empty()) {
-        //output.push_back(operatorStack.pop());
+         auto expr2 = expressionStack.pop();
+         auto expr1 = expressionStack.pop();
+         expressionStack.push(OperatorNode(operatorStack.pop(), expr1, expr2));
     }
 
-    //return output;
-    return 0;
+    return expressionStack.pop(); // there must be only 1 element by now
 }
 
 bool shouldParseAsOperator(const string &expression, int position) {
