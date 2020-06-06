@@ -58,7 +58,8 @@ TreeNode *parse(const string &expression) {
     while (!operatorStack.empty()) {
          auto expr2 = expressionStack.pop();
          auto expr1 = expressionStack.pop();
-         expressionStack.push(new OperatorNode(operatorStack.pop(), expr1, expr2));
+         auto token = operatorStack.pop();
+         expressionStack.push(new OperatorNode(dynamic_cast<Operator *>(token), expr1, expr2));
     }
 
     auto output = expressionStack.pop(); // there must be only 1 element by now
