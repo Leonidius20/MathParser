@@ -11,16 +11,16 @@ class BranchNode;
 class Visitor {
 public:
 
-    double visit(StatementListNode *node) const;
+    virtual double visit(StatementListNode *node) = 0;
 
-    double visit(ConstantNode *node) const;
+    virtual double visit(ConstantNode *node) = 0;
 
-    double visit(VariableNode *node) const;
+    virtual double visit(VariableNode *node) = 0;
 
-    double visit(OperatorNode *node) const;
+    virtual double visit(OperatorNode *node) = 0;
 
-    double visit(AssignmentNode *node) const;
+    virtual double visit(AssignmentNode *node) = 0;
 
-    double visit(BranchNode *node) const;
+    virtual double visit(BranchNode *node) = 0;
 
 };

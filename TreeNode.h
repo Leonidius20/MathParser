@@ -7,7 +7,7 @@
 
 class TreeNode {
 public:
-    virtual double accept(const Visitor &visitor) = 0;
+    virtual double accept(Visitor *visitor) = 0;
 
     [[nodiscard]] virtual bool isExpression() const = 0;
 };
@@ -16,7 +16,7 @@ class StatementListNode : public TreeNode {
 public:
     std::vector<TreeNode> statements;
 
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
+    double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     [[nodiscard]] bool isExpression() const override {
         return false;
@@ -39,7 +39,7 @@ public:
     OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
                                                                                 right(right) {};
 
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
+    double accept(Visitor *visitor) override { return visitor->visit(this); };
 };
 
 class VariableNode : public ExpressionNode {
@@ -48,7 +48,7 @@ public:
 
     explicit VariableNode(std::string name) : name(std::move(name)) {};
 
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
+    double accept(Visitor *visitor) override { return visitor->visit(this); };
 };
 
 class ConstantNode : public ExpressionNode {
@@ -57,7 +57,7 @@ public:
 
     explicit ConstantNode(const Number *value) : value(value) {};
 
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
+    double accept(Visitor *visitor) override { return visitor->visit(this); };
 };
 
 class AssignmentNode : public TreeNode {
@@ -67,7 +67,7 @@ public:
 
     AssignmentNode(VariableNode *variable, ExpressionNode *expression) : variable(variable), expression(expression) {}
 
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
+    double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     [[nodiscard]] bool isExpression() const override {
         return false;
@@ -84,7 +84,7 @@ public:
                                                                                                    ifTrue(ifTrue),
                                                                                                    ifFalse(ifFalse) {}
 
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
+    double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     [[nodiscard]] bool isExpression() const override {
         return false;
