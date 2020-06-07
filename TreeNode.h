@@ -3,15 +3,22 @@
 #include <string>
 #include <vector>
 #include "token.h"
+#include "visitor.h"
 
 class TreeNode {
+public:
+    virtual double accept(const Visitor &visitor) = 0;
 };
 
 class StatementListNode : public TreeNode {
     std::vector<TreeNode> statements;
+public:
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class ExpressionNode : public TreeNode {
+public:
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class OperatorNode : public ExpressionNode {
@@ -41,10 +48,14 @@ public:
 class AssignmentNode : public TreeNode {
     VariableNode *variable;
     ExpressionNode *expression;
+public:
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class BranchNode : public TreeNode {
     ExpressionNode *condition;
     StatementListNode *ifTrue;
     StatementListNode *ifFalse;
+public:
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
