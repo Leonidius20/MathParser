@@ -2,7 +2,9 @@
 
 // avoiding circular dependency
 class StatementListNode;
-class ExpressionNode;
+class ConstantNode;
+class VariableNode;
+class OperatorNode;
 class AssignmentNode;
 class BranchNode;
 
@@ -11,7 +13,11 @@ public:
 
     double visit(StatementListNode *node) const;
 
-    double visit(ExpressionNode *node) const;
+    double visit(ConstantNode *node) const;
+
+    double visit(VariableNode *node) const;
+
+    double visit(OperatorNode *node) const;
 
     double visit(AssignmentNode *node) const;
 
