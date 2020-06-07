@@ -10,6 +10,8 @@ public:
     virtual double accept(Visitor *visitor) = 0;
 
     [[nodiscard]] virtual bool isExpression() const = 0;
+
+    virtual void replaceChild(TreeNode *value, TreeNode *replacement) = 0;
 };
 
 class StatementListNode : public TreeNode {
@@ -21,6 +23,8 @@ public:
     [[nodiscard]] bool isExpression() const override {
         return false;
     }
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override;
 };
 
 class ExpressionNode : public TreeNode {
@@ -40,6 +44,8 @@ public:
                                                                                 right(right) {};
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override;
 };
 
 class VariableNode : public ExpressionNode {
@@ -49,6 +55,10 @@ public:
     explicit VariableNode(std::string name) : name(std::move(name)) {};
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override {
+        throw std::invalid_argument("VariableNode doesn't have any children.");
+    }
 };
 
 class ConstantNode : public ExpressionNode {
@@ -58,6 +68,10 @@ public:
     explicit ConstantNode(const Number *value) : value(value) {};
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
+
+    void replaceChild(TreeNode *node, TreeNode *replacement) override {
+        throw std::invalid_argument("ConstantNode doesn't have any children.");
+    }
 };
 
 class AssignmentNode : public TreeNode {
@@ -72,6 +86,8 @@ public:
     [[nodiscard]] bool isExpression() const override {
         return false;
     }
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override;
 };
 
 class BranchNode : public TreeNode {
@@ -89,4 +105,6 @@ public:
     [[nodiscard]] bool isExpression() const override {
         return false;
     }
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override;
 };
