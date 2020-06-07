@@ -3,10 +3,14 @@
 #include "shunting_yard.h"
 #include "token.h"
 #include "calculator.h"
+#include "TreeNode.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
+    char c;
+    cin >> c;
+
     if (argc < 2) {
         cerr << "Arithmetic expression is not specified" << endl;
         return 0;
@@ -17,8 +21,9 @@ int main(int argc, char *argv[]) {
         expression.append(argv[i]);
     }
 
-    try {
-        auto tokens = parse(expression);
+    ExpressionNode expr = *(parse(expression));
+    /*try {
+        expr = parse(expression);
         double result = compute(tokens);
         for (auto token : tokens) {
             if (token->isNumber()) delete token;
@@ -26,7 +31,7 @@ int main(int argc, char *argv[]) {
         cout << result << endl;
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
-    }
+    }*/
 
     Operator::destroyMap();
 }

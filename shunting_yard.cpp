@@ -11,8 +11,8 @@ const char NOT_FOUND = -1;
 
 bool shouldParseAsOperator(const string &expression, int position);
 
-TreeNode *parse(const string &expression) {
-    Stack<TreeNode *> expressionStack;
+ExpressionNode *parse(const string &expression) {
+    Stack<ExpressionNode *> expressionStack;
     Stack<Token *> operatorStack;
 
     for (int i = 0; i < expression.length(); i++) {
