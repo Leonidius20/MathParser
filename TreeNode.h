@@ -24,7 +24,8 @@ class OperatorNode : public ExpressionNode {
 public:
     ExpressionNode *left;
     ExpressionNode *right;
-    Operator *oper;
+    const Operator *oper;
+
     OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
                                                                                 right(right) {};
 

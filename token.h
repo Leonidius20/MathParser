@@ -45,7 +45,7 @@ public:
 
     [[nodiscard]] int getPrecedence() const { return precedence; }
 
-    double apply(double a, double b);
+    double apply(double a, double b) const;
 
     static void destroyMap() { delete operatorMap; }
 
