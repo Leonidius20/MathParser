@@ -8,6 +8,8 @@
 class TreeNode {
 public:
     virtual double accept(const Visitor &visitor) = 0;
+
+    [[nodiscard]] virtual bool isExpression() const = 0;
 };
 
 class StatementListNode : public TreeNode {
@@ -15,9 +17,17 @@ public:
     std::vector<TreeNode> statements;
 
     double accept(const Visitor &visitor) override { return visitor.visit(this); };
+
+    [[nodiscard]] bool isExpression() const override {
+        return false;
+    }
 };
 
 class ExpressionNode : public TreeNode {
+public:
+    [[nodiscard]] bool isExpression() const override {
+        return true;
+    }
 };
 
 class OperatorNode : public ExpressionNode {
@@ -58,6 +68,10 @@ public:
     AssignmentNode(VariableNode *variable, ExpressionNode *expression) : variable(variable), expression(expression) {}
 
     double accept(const Visitor &visitor) override { return visitor.visit(this); };
+
+    [[nodiscard]] bool isExpression() const override {
+        return false;
+    }
 };
 
 class BranchNode : public TreeNode {
@@ -71,4 +85,8 @@ public:
                                                                                                    ifFalse(ifFalse) {}
 
     double accept(const Visitor &visitor) override { return visitor.visit(this); };
+
+    [[nodiscard]] bool isExpression() const override {
+        return false;
+    }
 };
