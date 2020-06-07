@@ -4,6 +4,8 @@
 
 using namespace std;
 
+bool isTrue(double value) { return value != 0; }
+
 double ExpressionEvaluatorVisitor::visit(StatementListNode *node) {
     for (TreeNode *statement : node->statements) {
         auto result = statement->accept(this);
@@ -107,7 +109,16 @@ double OptimizationVisitor::visit(BranchNode *node) {
     node->ifTrue->accept(this);
     node->ifFalse->accept(this);
 
-    // TODO: if condition is constant...
+    if (node->condition->getType() == constant) {
+        auto value = dynamic_cast<ConstantNode *>(node->condition)->value->getValue();
+        if (isTrue(value)) {
+            parent->replaceChild(node, node->ifTrue);
+        } else if (node->ifFalse != nullptr) {
+            parent->replaceChild(node, node->ifFalse);
+        } else {
+            // TODO: remove BranchNode from parent?
+        }
+    }
 
     stack.pop();
     return 0;
