@@ -7,6 +7,7 @@
 
 class TreeNode {
 public:
+    friend class Visitor;
     virtual double accept(const Visitor &visitor) = 0;
 };
 
@@ -17,18 +18,18 @@ public:
 };
 
 class ExpressionNode : public TreeNode {
-public:
-    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class OperatorNode : public ExpressionNode {
+
+public:
     ExpressionNode *left;
     ExpressionNode *right;
     Operator *oper;
-
-public:
     OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
                                                                                 right(right) {};
+
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class VariableNode : public ExpressionNode {
@@ -36,6 +37,8 @@ class VariableNode : public ExpressionNode {
 
 public:
     explicit VariableNode(std::string name) : name(std::move(name)) {};
+
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class ConstantNode : public ExpressionNode {
@@ -43,6 +46,7 @@ class ConstantNode : public ExpressionNode {
 
 public:
     explicit ConstantNode(const Number *value) : value(value) {};
+    double accept(const Visitor &visitor) override { return visitor.visit(this); };
 };
 
 class AssignmentNode : public TreeNode {
