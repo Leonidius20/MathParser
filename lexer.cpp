@@ -66,7 +66,6 @@ vector<Token *> Lexer::tokenize() {
         } else if (c == '+' || c == '-' || c == '/' || c == '*' || c == '^') {
             output.push_back(Operator::get(c));
             offset++;
-            // TODO: fix ^ operator not adding
         }
     }
 
