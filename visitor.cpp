@@ -82,6 +82,11 @@ double OptimizationVisitor::visit(OperatorNode *node) {
 
     // TODO:
     //   - 0 [*/] expression -> 0
+    //   - 1 * expression -> expression
+    //   - expression ^ 1 -> expression
+    //   - expression ^ 0 -> 1
+    //   - 1 ^ expression -> 1
+    //   - 0 ^ expression -> 0
     //   - expression [*] 0 -> 0
     //   - 0 [+-] expression -> expression
     //   - expression [+-] 0 -> expression
