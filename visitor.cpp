@@ -188,7 +188,8 @@ double OptimizationVisitor::visit(BranchNode *node) {
         } else if (node->ifFalse != nullptr) {
             parent->replaceChild(node, node->ifFalse);
         } else {
-            // TODO: remove BranchNode from parent?
+            // Removing node from parent will cause shift of other nodes which is very inefficient.
+            // It's better to just leave as is.
         }
     }
 
