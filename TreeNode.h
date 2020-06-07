@@ -14,7 +14,7 @@ public:
 
 class StatementListNode : public TreeNode {
 public:
-    std::vector<TreeNode> statements;
+    std::vector<TreeNode *> statements;
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 

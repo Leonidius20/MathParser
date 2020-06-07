@@ -5,10 +5,10 @@
 using namespace std;
 
 double ExpressionEvaluatorVisitor::visit(StatementListNode *node) {
-    for (TreeNode &statement : node->statements) {
-        auto result = statement.accept(this);
+    for (TreeNode *statement : node->statements) {
+        auto result = statement->accept(this);
 
-        if (statement.isExpression()) {
+        if (statement->isExpression()) {
             cout << result << endl; // TODO: print expression.
         }
     }
@@ -56,8 +56,8 @@ double ExpressionEvaluatorVisitor::visit(BranchNode *node) {
 double OptimizationVisitor::visit(StatementListNode *node) {
     stack.push(node);
 
-    for (TreeNode &statement : node->statements) {
-        statement.accept(this);
+    for (TreeNode *statement : node->statements) {
+        statement->accept(this);
     }
 
     stack.pop();
