@@ -28,7 +28,6 @@ assignment: variable ASSIGN expression
 
 branch: IF LPAREN expression RPAREN statement_block (ELSE statement_block)
 
-
 */
 
 class Parser {
@@ -37,25 +36,30 @@ class Parser {
 
     void eatToken(TokenType type);
 
+    Operator *eatOperator(int precedence);
+
     StatementListNode *parseStatementList();
+
+    StatementListNode *parseStatementBlock();
 
     TreeNode *parseStatement();
 
     ExpressionNode *parseExpression();
 
-    AssignmentNode *parseAssignment();
+    ExpressionNode *parseTerm();
+
+    ExpressionNode *parseFactor();
+
+    ExpressionNode *parseValue();
 
     VariableNode *parseVariable();
 
+    AssignmentNode *parseAssignment();
+
     BranchNode *parseBranch();
 
-    StatementListNode *parseStatementBlock();
-
-    ExpressionNode *parseTerm();
 public:
     explicit Parser(std::vector<Token *> tokens) : tokens(std::move(tokens)) {}
 
     StatementListNode *parse();
 };
-
-StatementListNode *parseCode(const std::string &code);

@@ -5,17 +5,17 @@
 #include <utility>
 
 enum TokenType {
-    NUMBER,
-    IDENTIFIER,
-    OPERATOR,
-    OPENING_BRACKET,
-    CLOSING_BRACKET,
-    ASSIGNMENT,
-    OPENING_CURLY_BRACKET,
-    CLOSING_CURLY_BRACKET,
-    SEMICOLON,
-    IF_TOKEN,
-    ELSE_TOKEN,
+    NUMBER,                  // 0
+    IDENTIFIER,              // 1
+    OPERATOR,                // 2
+    OPENING_BRACKET,         // 3
+    CLOSING_BRACKET,         // 4
+    ASSIGNMENT,              // 5
+    OPENING_CURLY_BRACKET,   // 6
+    CLOSING_CURLY_BRACKET,   // 7
+    SEMICOLON,               // 8
+    IF_TOKEN,                // 9
+    ELSE_TOKEN,              // 10
 };
 
 class Token {
