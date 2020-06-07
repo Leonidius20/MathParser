@@ -1,18 +1,19 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <string>
 #include "token.h"
 
 class Lexer {
     std::string text;
-    unsigned offset;
+    unsigned offset = 0;
 
     Token *readIdentifier();
 
     Token *readNumber();
 public:
-    Lexer(const std::string &input) : text(input) {}
+    explicit Lexer(std::string input) : text(std::move(input)) {}
     std::vector<Token *> tokenize();
 };
 

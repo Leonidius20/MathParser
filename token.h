@@ -2,9 +2,25 @@
 
 #include <string>
 #include <map>
+#include <utility>
+
+enum TokenType {
+    NUMBER,
+    IDENTIFIER,
+    OPERATOR,
+    OPENING_BRACKET,
+    CLOSING_BRACKET,
+    ASSIGNMENT,
+    OPENING_CURLY_BRACKET,
+    CLOSING_CURLY_BRACKET,
+    SEMICOLON,
+    IF_TOKEN,
+    ELSE_TOKEN,
+};
 
 class Token {
-
+public:
+    [[nodiscard]] virtual TokenType getType() const = 0;
 };
 
 class MathToken : public Token {
@@ -27,6 +43,8 @@ public:
 
     bool isNumber() override { return true; };
 
+    [[nodiscard]] TokenType getType() const override { return TokenType::NUMBER; };
+
     ~Number() override = default;
 };
 
@@ -48,7 +66,9 @@ public:
 
     [[nodiscard]] int getPrecedence() const { return precedence; }
 
-    double apply(double a, double b) const;
+    [[nodiscard]] double apply(double a, double b) const;
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::OPERATOR; };
 
     static void destroyMap() { delete operatorMap; }
 
@@ -67,48 +87,72 @@ public:
     bool isNumber() override { return false; };
 
     static OpeningBracket *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::OPENING_BRACKET; };
 };
 
 class ClosingBracket : public Token {
     static ClosingBracket *instance;
 public:
     static ClosingBracket *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::CLOSING_BRACKET; };
 };
 
 class Identifier : public Token {
     std::string name;
 public:
-    Identifier(const std::string &name) : name(name) {};
+    explicit Identifier(std::string name) : name(std::move(name)) {};
 
     [[nodiscard]] std::string getName() const { return name; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::IDENTIFIER; };
 };
 
 class Assignment : public Token {
     static Assignment *instance;
 public:
     static Assignment *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::ASSIGNMENT; };
 };
 
 class IfToken : public Token {
     static IfToken *instance;
 public:
     static IfToken *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::IF_TOKEN; };
+};
+
+class ElseToken : public Token {
+    static ElseToken *instance;
+public:
+    static ElseToken *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::ELSE_TOKEN; };
 };
 
 class OpeningCurlyBracket : public Token {
     static OpeningCurlyBracket *instance;
 public:
     static OpeningCurlyBracket *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::OPENING_CURLY_BRACKET; };
 };
 
 class ClosingCurlyBracket : public Token {
     static ClosingCurlyBracket *instance;
 public:
     static ClosingCurlyBracket *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::CLOSING_CURLY_BRACKET; };
 };
 
 class Semicolon : public Token {
     static Semicolon *instance;
 public:
     static Semicolon *getInstance() { return instance; };
+
+    [[nodiscard]] TokenType getType() const override { return TokenType::SEMICOLON; };
 };

@@ -39,6 +39,7 @@ OpeningBracket *OpeningBracket::instance = new OpeningBracket();
 ClosingBracket *ClosingBracket::instance = new ClosingBracket();
 Assignment *Assignment::instance = new Assignment();
 IfToken *IfToken::instance = new IfToken();
+ElseToken *ElseToken::instance = new ElseToken();
 OpeningCurlyBracket *OpeningCurlyBracket::instance = new OpeningCurlyBracket();
 ClosingCurlyBracket *ClosingCurlyBracket::instance = new ClosingCurlyBracket();
 Semicolon *Semicolon::instance = new Semicolon();

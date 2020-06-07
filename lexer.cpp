@@ -15,7 +15,8 @@ Token *Lexer::readIdentifier() {
         name.append(string(1, c));
     }
 
-    if (name == "if") return new IfToken();
+    if (name == "if") return IfToken::getInstance();
+    else if (name == "else") return ElseToken::getInstance();
     else return new Identifier(name);
 }
 
@@ -45,27 +46,20 @@ vector<Token *> Lexer::tokenize() {
         } else if (isdigit(c)) {
             output.push_back(readNumber());
         } else if (c == '=') {
-            output.push_back(new Assignment()); // TODO: replace with singletons
+            output.push_back(Assignment::getInstance());
         } else if (c == ';') {
-            output.push_back(new Semicolon());
+            output.push_back(Semicolon::getInstance());
         } else if (c == '(') {
             output.push_back(OpeningBracket::getInstance());
         } else if (c == ')') {
-            output.push_back(new ClosingBracket());
+            output.push_back(ClosingBracket::getInstance());
         } else if (c == '{') {
-            output.push_back(new OpeningCurlyBracket());
+            output.push_back(OpeningCurlyBracket::getInstance());
         } else if (c == '}') {
-            output.push_back(new ClosingCurlyBracket());
-        } else if (c == '+') {
-            output.push_back(Operator::get('+'));
-        } else if (c == '-') {
-            output.push_back(Operator::get('+'));
-        } else if (c == '*') {
-            output.push_back(Operator::get('+'));
-        } else if (c == '/') {
-            output.push_back(Operator::get('+'));
-        } else if (c == '^') {
-            output.push_back(Operator::get('+'));
+            output.push_back(ClosingCurlyBracket::getInstance());
+        } else if (c == '+' || c == '-' || c == '/' || c == '*' || c == '^') {
+            output.push_back(Operator::get(c));
+            // TODO: fix ^ operator not adding
         }
     }
 
