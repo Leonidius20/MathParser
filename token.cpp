@@ -36,3 +36,9 @@ Operator *Operator::get(char signature) {
 }
 
 OpeningBracket *OpeningBracket::instance = new OpeningBracket();
+ClosingBracket *ClosingBracket::instance = new ClosingBracket();
+Assignment *Assignment::instance = new Assignment();
+IfToken *IfToken::instance = new IfToken();
+OpeningCurlyBracket *OpeningCurlyBracket::instance = new OpeningCurlyBracket();
+ClosingCurlyBracket *ClosingCurlyBracket::instance = new ClosingCurlyBracket();
+Semicolon *Semicolon::instance = new Semicolon();

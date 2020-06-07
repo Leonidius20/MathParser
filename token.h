@@ -70,7 +70,9 @@ public:
 };
 
 class ClosingBracket : public Token {
-
+    static ClosingBracket *instance;
+public:
+    static ClosingBracket *getInstance() { return instance; };
 };
 
 class Identifier : public Token {
@@ -82,21 +84,31 @@ public:
 };
 
 class Assignment : public Token {
-
+    static Assignment *instance;
+public:
+    static Assignment *getInstance() { return instance; };
 };
 
 class IfToken : public Token {
-
+    static IfToken *instance;
+public:
+    static IfToken *getInstance() { return instance; };
 };
 
 class OpeningCurlyBracket : public Token {
-
+    static OpeningCurlyBracket *instance;
+public:
+    static OpeningCurlyBracket *getInstance() { return instance; };
 };
 
 class ClosingCurlyBracket : public Token {
-
+    static ClosingCurlyBracket *instance;
+public:
+    static ClosingCurlyBracket *getInstance() { return instance; };
 };
 
 class Semicolon : public Token {
-
+    static Semicolon *instance;
+public:
+    static Semicolon *getInstance() { return instance; };
 };

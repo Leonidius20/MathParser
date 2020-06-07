@@ -3,10 +3,19 @@
 
 using namespace std;
 
-StatementListNode *parseCode(const string &code) {
-    StatementListNode *root = new StatementListNode;
+TreeNode *Parser::parseStatement() {
 
-    bool insideNested = false;
+}
 
-    return root;
+StatementListNode *Parser::parseStatementList() {
+    StatementListNode node;
+    while (tokens[offset] != Semicolon::getInstance()) {
+        node.statements.push_back(parseStatement());
+    }
+
+    return nullptr;
+}
+
+StatementListNode *Parser::parse() {
+    return parseStatementList();
 }

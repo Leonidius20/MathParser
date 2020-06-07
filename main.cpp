@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "shunting_yard.h"
+#include "lexer.h"
 #include "token.h"
 #include "calculator.h"
 #include "TreeNode.h"
@@ -8,20 +8,23 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    char c;
-    cin >> c;
 
-    if (argc < 2) {
+    /*if (argc < 2) {
         cerr << "Arithmetic expression is not specified" << endl;
         return 0;
-    }
+    }*/
 
-    string expression;
-    for (int i = 1; i < argc; i++) {
+    string expression = "blah = 4;"
+                        " if (1 + 5 * 6^3) "
+                        " { blah =  4/ 2 + 4 - 4^3; }";
+    //string expression;
+    /*for (int i = 1; i < argc; i++) {
         expression.append(argv[i]);
-    }
+    }*/
 
-    ExpressionNode expr = *(parse(expression));
+    auto tokens = Lexer(expression).tokenize();
+
+    //ExpressionNode expr = *(parse(expression));
     /*try {
         expr = parse(expression);
         double result = compute(tokens);
