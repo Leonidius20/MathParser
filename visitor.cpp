@@ -50,3 +50,65 @@ double ExpressionEvaluatorVisitor::visit(BranchNode *node) {
 
     return 0;
 }
+
+//===================== OptimizationVisitor =============================================
+
+double OptimizationVisitor::visit(StatementListNode *node) {
+    stack.push(node);
+
+    for (TreeNode &statement : node->statements) {
+        statement.accept(this);
+    }
+
+    stack.pop();
+    return 0;
+}
+
+double OptimizationVisitor::visit(ConstantNode *node) {
+    // There is nothing to optimize.
+    return 0;
+}
+
+double OptimizationVisitor::visit(VariableNode *node) {
+    // There is nothing to optimize.
+    return 0;
+}
+
+double OptimizationVisitor::visit(OperatorNode *node) {
+    TreeNode *parent = stack.peek();
+    stack.push(node);
+
+    // TODO:
+    //   - 0 [*/] expression -> 0
+    //   - expression [*] 0 -> 0
+    //   - 0 [+-] expression -> expression
+    //   - expression [+-] 0 -> expression
+    //   - expression [*/] 1 -> expression
+
+    stack.pop();
+    return 0;
+}
+
+double OptimizationVisitor::visit(AssignmentNode *node) {
+    stack.push(node);
+
+    // Try to optimize expression.
+    node->expression->accept(this);
+
+    stack.pop();
+    return 0;
+}
+
+double OptimizationVisitor::visit(BranchNode *node) {
+    TreeNode *parent = stack.peek();
+    stack.push(node);
+
+    node->condition->accept(this);
+    node->ifTrue->accept(this);
+    node->ifFalse->accept(this);
+
+    // TODO: if condition is constant...
+
+    stack.pop();
+    return 0;
+}
