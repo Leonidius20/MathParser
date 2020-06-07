@@ -40,8 +40,8 @@ public:
     ExpressionNode *right;
     const Operator *oper;
 
-    OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
-                                                                                right(right) {};
+    OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) :
+            oper(oper), left(left), right(right) {};
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
@@ -96,9 +96,8 @@ public:
     StatementListNode *ifTrue;
     StatementListNode *ifFalse;
 
-    BranchNode(ExpressionNode *condition, StatementListNode *ifTrue, StatementListNode *ifFalse) : condition(condition),
-                                                                                                   ifTrue(ifTrue),
-                                                                                                   ifFalse(ifFalse) {}
+    BranchNode(ExpressionNode *condition, StatementListNode *ifTrue, StatementListNode *ifFalse) :
+            condition(condition), ifTrue(ifTrue), ifFalse(ifFalse) {}
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
