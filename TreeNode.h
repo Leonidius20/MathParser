@@ -17,11 +17,11 @@ class ExpressionNode : public TreeNode {
 class OperatorNode : public ExpressionNode {
     ExpressionNode *left;
     ExpressionNode *right;
-    const Operator oper;
+    Operator *oper;
 
 public:
-    OperatorNode(const Operator &oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
-                                                                                      right(right) {};
+    OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) : oper(oper), left(left),
+                                                                                right(right) {};
 };
 
 class VariableNode : public ExpressionNode {
@@ -38,7 +38,7 @@ public:
     explicit ConstantNode(const Number *value) : value(value) {};
 };
 
-class AssigmentNode : public TreeNode {
+class AssignmentNode : public TreeNode {
     VariableNode *variable;
     ExpressionNode *expression;
 };
