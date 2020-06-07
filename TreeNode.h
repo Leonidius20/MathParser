@@ -5,6 +5,10 @@
 #include "token.h"
 #include "visitor.h"
 
+enum TreeNodeType {
+    statement, operatorNode, variable, constant, assignment, branch
+};
+
 class TreeNode {
 public:
     virtual double accept(Visitor *visitor) = 0;
@@ -12,6 +16,8 @@ public:
     [[nodiscard]] virtual bool isExpression() const = 0;
 
     virtual void replaceChild(TreeNode *value, TreeNode *replacement) = 0;
+
+    [[nodiscard]] virtual TreeNodeType getType() const = 0;
 };
 
 class StatementListNode : public TreeNode {
@@ -25,6 +31,10 @@ public:
     }
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
+
+    [[nodiscard]] TreeNodeType getType() const override {
+        return statement;
+    }
 };
 
 class ExpressionNode : public TreeNode {
@@ -46,6 +56,10 @@ public:
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
+
+    [[nodiscard]] TreeNodeType getType() const override {
+        return operatorNode;
+    }
 };
 
 class VariableNode : public ExpressionNode {
@@ -59,6 +73,10 @@ public:
     void replaceChild(TreeNode *value, TreeNode *replacement) override {
         throw std::invalid_argument("VariableNode doesn't have any children.");
     }
+
+    [[nodiscard]] TreeNodeType getType() const override {
+        return variable;
+    }
 };
 
 class ConstantNode : public ExpressionNode {
@@ -71,6 +89,10 @@ public:
 
     void replaceChild(TreeNode *node, TreeNode *replacement) override {
         throw std::invalid_argument("ConstantNode doesn't have any children.");
+    }
+
+    [[nodiscard]] TreeNodeType getType() const override {
+        return constant;
     }
 };
 
@@ -88,6 +110,10 @@ public:
     }
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
+
+    [[nodiscard]] TreeNodeType getType() const override {
+        return assignment;
+    }
 };
 
 class BranchNode : public TreeNode {
@@ -106,4 +132,8 @@ public:
     }
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
+
+    [[nodiscard]] TreeNodeType getType() const override {
+        return branch;
+    }
 };
