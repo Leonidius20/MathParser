@@ -4,4 +4,4 @@
 #include <string>
 #include "TreeNode.h"
 
-ExpressionNode *parse(const std::string& expression);
+ExpressionNode *parseExpression(const std::string& expression);

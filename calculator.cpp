@@ -6,7 +6,7 @@
 
 using namespace std;
 
-double compute(const vector<Token *> &tokens) {
+double compute(const vector<MathToken *> &tokens) {
     Stack<double> numbers;
     for (auto token : tokens) {
         if (!token->isOperator()) {

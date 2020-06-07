@@ -11,9 +11,9 @@ const char NOT_FOUND = -1;
 
 bool shouldParseAsOperator(const string &expression, int position);
 
-ExpressionNode *parse(const string &expression) {
+ExpressionNode *parseExpression(const string &expression) {
     Stack<ExpressionNode *> expressionStack;
-    Stack<Token *> operatorStack;
+    Stack<MathToken *> operatorStack;
 
     for (int i = 0; i < expression.length(); i++) {
         char c = expression[i];

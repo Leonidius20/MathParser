@@ -4,14 +4,19 @@
 #include <map>
 
 class Token {
-public:
-    virtual bool isOperator() = 0;
-    virtual bool isNumber() = 0;
-    virtual ~Token() = default;
+
 };
 
-class Number : public Token {
-private:
+class MathToken : public Token {
+public:
+    virtual bool isOperator() = 0;
+
+    virtual bool isNumber() = 0;
+
+    virtual ~MathToken() = default;
+};
+
+class Number : public MathToken {
     const double value;
 public:
     explicit Number(double value) : value(value) {}
@@ -25,15 +30,13 @@ public:
     ~Number() override = default;
 };
 
-class Operator : public Token {
-private:
+class Operator : public MathToken {
     const int precedence;
     const char signature;
     static std::map<char, Operator> *operatorMap;
 
-    Operator(const int precedence, char signature) : precedence(precedence), signature(signature) {}
-
 public:
+    Operator(const int precedence, char signature) : precedence(precedence), signature(signature) {}
 
     static Operator *get(char signature);
 
@@ -52,8 +55,7 @@ public:
     ~Operator() override = default;
 };
 
-class OpeningBracket : public Token {
-private:
+class OpeningBracket : public MathToken {
     static OpeningBracket *instance;
 
     OpeningBracket() = default;
@@ -65,4 +67,36 @@ public:
     bool isNumber() override { return false; };
 
     static OpeningBracket *getInstance() { return instance; };
+};
+
+class ClosingBracket : public Token {
+
+};
+
+class Identifier : public Token {
+    std::string name;
+public:
+    Identifier(const std::string &name) : name(name) {};
+
+    [[nodiscard]] std::string getName() const { return name; };
+};
+
+class Assignment : public Token {
+
+};
+
+class IfToken : public Token {
+
+};
+
+class OpeningCurlyBracket : public Token {
+
+};
+
+class ClosingCurlyBracket : public Token {
+
+};
+
+class Semicolon : public Token {
+
 };
