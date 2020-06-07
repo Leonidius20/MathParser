@@ -177,7 +177,9 @@ double OptimizationVisitor::visit(BranchNode *node) {
 
     node->condition->accept(this);
     node->ifTrue->accept(this);
-    node->ifFalse->accept(this);
+    if (node->ifFalse != nullptr) {
+        node->ifFalse->accept(this);
+    }
 
     if (node->condition->getType() == constant) {
         auto value = dynamic_cast<ConstantNode *>(node->condition)->value->getValue();
