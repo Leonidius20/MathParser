@@ -36,10 +36,10 @@ Token *Lexer::readNumber() {
 vector<Token *> Lexer::tokenize() {
     vector<Token *> output;
 
-    for (offset = 0; offset < text.size(); offset++) {
+    for (offset = 0; offset < text.size(); ) {
         char c = text[offset];
 
-        if (isspace(c)) continue;
+        if (isspace(c)) offset++;
 
         else if (isalpha(c)) {
             output.push_back(readIdentifier());
@@ -47,18 +47,25 @@ vector<Token *> Lexer::tokenize() {
             output.push_back(readNumber());
         } else if (c == '=') {
             output.push_back(Assignment::getInstance());
+            offset++;
         } else if (c == ';') {
             output.push_back(Semicolon::getInstance());
+            offset++;
         } else if (c == '(') {
             output.push_back(OpeningBracket::getInstance());
+            offset++;
         } else if (c == ')') {
             output.push_back(ClosingBracket::getInstance());
+            offset++;
         } else if (c == '{') {
             output.push_back(OpeningCurlyBracket::getInstance());
+            offset++;
         } else if (c == '}') {
             output.push_back(ClosingCurlyBracket::getInstance());
+            offset++;
         } else if (c == '+' || c == '-' || c == '/' || c == '*' || c == '^') {
             output.push_back(Operator::get(c));
+            offset++;
             // TODO: fix ^ operator not adding
         }
     }

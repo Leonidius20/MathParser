@@ -9,6 +9,13 @@ StatementListNode *Parser::parse() {
 }
 
 void Parser::eatToken(TokenType type) {
+    if (offset >= tokens.size()) {
+        string what = "Syntax error at offset ";
+        what.append(to_string(offset));
+        what.append(": unexpected end of file, expected token #");
+        what.append(to_string(type));
+        throw invalid_argument(what);
+    }
     if (tokens[offset]->getType() != type) {
         string what = "Syntax error at offset ";
         what.append(to_string(offset));
@@ -19,6 +26,14 @@ void Parser::eatToken(TokenType type) {
 }
 
 Operator *Parser::eatOperator(int precedence) {
+    if (offset >= tokens.size()) {
+        string what = "Syntax error at offset ";
+        what.append(to_string(offset));
+        what.append(": unexpected end of file, expected token #");
+        what.append(to_string(TokenType::OPERATOR));
+        throw invalid_argument(what);
+    }
+
     if (tokens[offset]->getType() != TokenType::OPERATOR) {
         string what = "Syntax error at offset ";
         what.append(to_string(offset));
@@ -63,16 +78,20 @@ StatementListNode *Parser::parseStatementBlock() {
 }
 
 /*
- * (expression | assignment | branch | empty)
+ * (expression | assignment | branch | empty);
  */
 TreeNode *Parser::parseStatement() {
-    if (tokens[offset]->getType() == TokenType::IDENTIFIER
+    if (offset < tokens.size() && tokens[offset]->getType() == TokenType::IDENTIFIER
         && tokens[offset + 1]->getType() == TokenType::ASSIGNMENT) {
-        return parseAssignment();
-    } else if (tokens[offset]->getType() == TokenType::IF_TOKEN) {
+        auto assignment = parseAssignment();
+        eatToken(TokenType::SEMICOLON);
+        return assignment;
+    } else if (offset < tokens.size() && tokens[offset]->getType() == TokenType::IF_TOKEN) {
         return parseBranch();
     } else {
-        return parseExpression();
+        auto expr = parseExpression();
+        eatToken(TokenType::SEMICOLON);
+        return expr;
     }
 }
 
@@ -82,7 +101,7 @@ TreeNode *Parser::parseStatement() {
 ExpressionNode *Parser::parseExpression() {
     ExpressionNode *node = parseTerm();
 
-    while (tokens[offset]->getType() == TokenType::OPERATOR) {
+    while (offset < tokens.size() && tokens[offset]->getType() == TokenType::OPERATOR) {
         auto op = dynamic_cast<Operator *>(tokens[offset]);
         if (op->getPrecedence() != 1) break;
         offset++;
@@ -99,7 +118,7 @@ ExpressionNode *Parser::parseExpression() {
 ExpressionNode *Parser::parseTerm() {
     ExpressionNode *node = parseFactor();
 
-    while (tokens[offset]->getType() == TokenType::OPERATOR) {
+    while (offset < tokens.size() && tokens[offset]->getType() == TokenType::OPERATOR) {
         auto op = dynamic_cast<Operator *>(tokens[offset]);
         if (op->getPrecedence() != 2) break;
         offset++;
@@ -116,7 +135,7 @@ ExpressionNode *Parser::parseTerm() {
 ExpressionNode *Parser::parseFactor() {
     ExpressionNode *node = parseValue();
 
-    while (tokens[offset]->getType() == TokenType::OPERATOR) {
+    while (offset < tokens.size() && tokens[offset]->getType() == TokenType::OPERATOR) {
         auto op = dynamic_cast<Operator *>(tokens[offset]);
         if (op->getPrecedence() != 3) break;
         offset++;
@@ -192,7 +211,7 @@ BranchNode *Parser::parseBranch() {
     eatToken(TokenType::CLOSING_BRACKET);
     auto ifTrue = parseStatementBlock();
     StatementListNode *ifFalse = nullptr;
-    if (tokens[offset]->getType() == TokenType::ELSE_TOKEN) {
+    if (offset < tokens.size() && tokens[offset]->getType() == TokenType::ELSE_TOKEN) {
         eatToken(ELSE_TOKEN);
         ifFalse = parseStatementBlock();
     }

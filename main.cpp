@@ -12,18 +12,11 @@ int main(int argc, char *argv[]) {
     // TODO: fix ^ operator
 
     string expression = "blah = 4;"
-                        " if (1 + 5 * 6) "
-                        " { blah =  4/ 2 + 4 - 4; }";
+                        " if (1 + 5 * 6 ^ 2) "
+                        " { blah =  4/ 2 + 4 - 4 ^ 5; }";
 
     auto tokens = Lexer(expression).tokenize();
-
-    for (auto token : tokens) {
-        cout << token->getType() << endl;
-    }
-    // auto tree = Parser(tokens).parse();
-    Parser p(tokens);
-
-    p.parse();
+    auto tree = Parser(tokens).parse();
     // OptimizationVisitor().visit(tree);
     // auto value = ExpressionEvaluatorVisitor().visit(tree);
 
