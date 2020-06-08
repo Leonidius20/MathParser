@@ -36,5 +36,3 @@ public:
     virtual double visit(BranchNode *node) = 0;
 
 };
-
-bool isTrue(double value) { return value != 0; }
