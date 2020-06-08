@@ -148,13 +148,13 @@ ExpressionNode *Parser::parseFactor() {
 }
 
 /*
- * PLUS value | MINUS value | NUMBER | LPAREN expression RPAREN | variable
+ * PLUS expression | MINUS expression | NUMBER | LPAREN expression RPAREN | variable
  */
 ExpressionNode *Parser::parseValue() {
     switch (tokens[offset]->getType()) {
         case Token::Type::OPERATOR: { // unary operator
             auto op = eatOperator(1);
-            auto value = parseValue();
+            auto value = parseExpression();
             return new OperatorNode(op, new ConstantNode(new Number(0)), value);
         }
         case Token::Type::NUMBER: {

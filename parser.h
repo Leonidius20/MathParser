@@ -21,7 +21,7 @@ term: factor ((MUL|DIV) factor)*
 
 factor: value (^ value)*
 
-value: PLUS value | MINUS value | NUMBER | LPAREN expression RPAREN | variable
+value: PLUS expression | MINUS expression | NUMBER | LPAREN expression RPAREN | variable
 
 variable: ID
 
