@@ -82,7 +82,7 @@ StatementListNode *Parser::parseStatementBlock() {
  * (expression | assignment | branch | empty);
  */
 TreeNode *Parser::parseStatement() {
-    if (offset < tokens.size() && tokens[offset]->getType() == Token::Type::IDENTIFIER
+    if (offset + 1 < tokens.size() && tokens[offset]->getType() == Token::Type::IDENTIFIER
         && tokens[offset + 1]->getType() == Token::Type::ASSIGNMENT) {
         auto assignment = parseAssignment();
         eatToken(Token::Type::SEMICOLON);

@@ -22,10 +22,14 @@ int main(int argc, char *argv[]) {
     string line, expression;
     while (getline(stream, line)) expression.append(line);
 
-    auto tokens = Lexer(expression).tokenize();
-    auto tree = Parser(tokens).parse();
-    tree.optimize();
-    tree.evaluate();
+    try {
+        auto tokens = Lexer(expression).tokenize();
+        auto tree = Parser(tokens).parse();
+        tree.optimize();
+        tree.evaluate();
+    } catch (const invalid_argument &e) {
+        cerr << e.what() << endl;
+    }
 
     Operator::destroyMap();
     Token::destroyMap();
