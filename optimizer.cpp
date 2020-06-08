@@ -35,8 +35,6 @@ double OptimizationVisitor::visit(OperatorNode *node) {
     stack.pop();
 
     char signature = node->oper->getSignature();
-    auto constantZero = new ConstantNode(new Number(0));
-    auto constantOne = new ConstantNode(new Number(1));
 
     // Try optimize right first because `0^0 = 1`
     if (node->right->getType() == constant) {
@@ -45,20 +43,30 @@ double OptimizationVisitor::visit(OperatorNode *node) {
         if (value == 0) {
             switch (signature) {
                 // expression [*] 0 -> 0
-                case '*':
+                case '*': {
+                    auto constantZero = new ConstantNode(new Number(0));
                     parent->replaceChild(node, constantZero);
+                    delete node;
                     break;
+                }
 
                     // expression [+-] 0 -> expression
                 case '+':
                 case '-':
                     parent->replaceChild(node, node->left);
+
+                    // Avoid deletion of left subtree because we still use it.
+                    node->left = nullptr;
+                    delete node;
                     break;
 
                     // expression ^ 0 -> 1
-                case '^':
+                case '^': {
+                    auto constantOne = new ConstantNode(new Number(1));
                     parent->replaceChild(node, constantOne);
+                    delete node;
                     break;
+                }
             }
         } else if (value == 1) {
             switch (signature) {
@@ -67,6 +75,8 @@ double OptimizationVisitor::visit(OperatorNode *node) {
                 case '/':
                 case '^':
                     parent->replaceChild(node, node->left);
+                    node->left = nullptr;
+                    delete node;
                     break;
             }
         }
@@ -78,14 +88,19 @@ double OptimizationVisitor::visit(OperatorNode *node) {
                 // 0 [*/^] expression -> 0
                 case '*':
                 case '/':
-                case '^':
+                case '^': {
+                    auto constantZero = new ConstantNode(new Number(0));
                     parent->replaceChild(node, constantZero);
+                    delete node;
                     break;
+                }
 
                     // 0 [+-] expression -> expression
                 case '+':
                 case '-':
                     parent->replaceChild(node, node->right);
+                    node->right = nullptr;
+                    delete node;
                     break;
             }
         } else if (value == 1)
@@ -93,12 +108,17 @@ double OptimizationVisitor::visit(OperatorNode *node) {
                 // 1 * expression -> expression
                 case '*':
                     parent->replaceChild(node, node->right);
+                    node->right = nullptr;
+                    delete node;
                     break;
 
                     // 1 ^ expression -> 1
-                case '^':
+                case '^': {
+                    auto constantOne = new ConstantNode(new Number(1));
                     parent->replaceChild(node, constantOne);
+                    delete node;
                     break;
+                }
             }
     }
 
@@ -131,8 +151,14 @@ double OptimizationVisitor::visit(BranchNode *node) {
         auto value = dynamic_cast<ConstantNode *>(node->condition)->value->getValue();
         if (isTrue(value)) {
             parent->replaceChild(node, node->ifTrue);
+
+            node->ifTrue = nullptr;
+            delete node;
         } else if (node->ifFalse != nullptr) {
             parent->replaceChild(node, node->ifFalse);
+
+            node->ifFalse = nullptr;
+            delete node;
         } else {
             // Removing node from parent will cause shift of other nodes which is very inefficient.
             // It's better to just leave as is.
