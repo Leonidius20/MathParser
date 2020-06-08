@@ -6,7 +6,7 @@
 #include "visitor.h"
 
 enum TreeNodeType {
-    statement, operatorNode, variable, constant, assignment, branch
+    STATEMENT_LIST, OPERATOR, VARIABLE, CONSTANT, ASSIGNMENT, BRANCH
 };
 
 class TreeNode {
@@ -41,7 +41,7 @@ public:
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return statement;
+        return STATEMENT_LIST;
     }
 };
 
@@ -72,7 +72,7 @@ public:
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return operatorNode;
+        return OPERATOR;
     }
 };
 
@@ -91,7 +91,7 @@ public:
     }
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return variable;
+        return VARIABLE;
     }
 };
 
@@ -112,7 +112,7 @@ public:
     }
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return constant;
+        return CONSTANT;
     }
 };
 
@@ -137,7 +137,7 @@ public:
     }
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return assignment;
+        return ASSIGNMENT;
     }
 };
 
@@ -165,6 +165,6 @@ public:
     }
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return branch;
+        return BRANCH;
     }
 };
