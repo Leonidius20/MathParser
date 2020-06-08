@@ -5,8 +5,6 @@
 class ExpressionEvaluatorVisitor : public Visitor {
     std::unordered_map<std::string, double> variablesTable;
 
-    static bool isTrue(double value) { return value != 0; }
-
 public:
     double visit(StatementListNode *node) override;
 

@@ -5,8 +5,6 @@
 class OptimizationVisitor : public Visitor {
     Stack<TreeNode *> stack;
 
-    static bool isTrue(double value) { return value != 0; }
-
 public:
     double visit(StatementListNode *node) override;
 
