@@ -97,7 +97,6 @@ double OptimizationVisitor::visit(OperatorNode *node) {
 
                     // 0 [+-] expression -> expression
                 case '+':
-                case '-':
                     parent->replaceChild(node, node->right);
                     node->right = nullptr;
                     delete node;
