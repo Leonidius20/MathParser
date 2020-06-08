@@ -9,9 +9,11 @@ Token *Lexer::readIdentifier() {
     string name;
 
     char c = text[offset];
-    offset--; // TODO: remake the shitcode
+    name.append(string(1, c));
 
-    while (++offset != text.size() && isalnum(c = text[offset])) {
+    while (offset + 1 != text.size() && isalnum(text[offset + 1])) {
+        offset++;
+        c = text[offset];
         name.append(string(1, c));
     }
 
@@ -24,9 +26,11 @@ Token *Lexer::readNumber() {
     string number;
 
     char c = text[offset];
-    offset--;
+    number.append(string(1, c));
 
-    while (++offset != text.size() && (isdigit(c = text[offset]) || (c = text[offset]) == '.')) {
+    while (offset + 1 != text.size() && (isdigit(text[offset + 1]) || text[offset + 1] == '.')) {
+        offset++;
+        c = text[offset];
         number.append(string(1, c));
     }
 
@@ -36,36 +40,19 @@ Token *Lexer::readNumber() {
 vector<Token *> Lexer::tokenize() {
     vector<Token *> output;
 
-    for (offset = 0; offset < text.size(); ) {
+    for (offset = 0; offset < text.size(); offset++) {
         char c = text[offset];
 
-        if (isspace(c)) offset++;
+        if (isspace(c)) continue;
 
         else if (isalpha(c)) {
             output.push_back(readIdentifier());
         } else if (isdigit(c)) {
             output.push_back(readNumber());
-        } else if (c == '=') {
-            output.push_back(Assignment::getInstance());
-            offset++;
-        } else if (c == ';') {
-            output.push_back(Semicolon::getInstance());
-            offset++;
-        } else if (c == '(') {
-            output.push_back(OpeningBracket::getInstance());
-            offset++;
-        } else if (c == ')') {
-            output.push_back(ClosingBracket::getInstance());
-            offset++;
-        } else if (c == '{') {
-            output.push_back(OpeningCurlyBracket::getInstance());
-            offset++;
-        } else if (c == '}') {
-            output.push_back(ClosingCurlyBracket::getInstance());
-            offset++;
-        } else if (c == '+' || c == '-' || c == '/' || c == '*' || c == '^') {
+        } else if (Operator::isOperator(c)) {
             output.push_back(Operator::get(c));
-            offset++;
+        } else if (Token::isNonOperatorToken(c)) {
+            output.push_back(Token::get(c));
         }
     }
 

@@ -3,9 +3,6 @@
 #include <fstream>
 #include "lexer.h"
 #include "parser.h"
-#include "token.h"
-#include "calculator.h"
-#include "TreeNode.h"
 
 using namespace std;
 
@@ -31,4 +28,5 @@ int main(int argc, char *argv[]) {
     // auto value = ExpressionEvaluatorVisitor().visit(tree);
 
     Operator::destroyMap();
+    Token::destroyMap();
 }

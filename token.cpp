@@ -30,7 +30,7 @@ map<char, Operator> *Operator::operatorMap = new map<char, Operator>{
 
 Operator *Operator::get(char signature) {
     if (!isOperator(signature)) {
-        throw invalid_argument("Unknown operator: " + to_string(signature));
+        throw invalid_argument("Unknown operator: " + string(1, signature));
     }
     return &operatorMap->at(signature);
 }
@@ -43,3 +43,21 @@ ElseToken *ElseToken::instance = new ElseToken();
 OpeningCurlyBracket *OpeningCurlyBracket::instance = new OpeningCurlyBracket();
 ClosingCurlyBracket *ClosingCurlyBracket::instance = new ClosingCurlyBracket();
 Semicolon *Semicolon::instance = new Semicolon();
+
+map<char, Token *> *Token::tokenMap = new map<char, Token *>{
+        {'=', Assignment::getInstance()},
+        {';', Semicolon::getInstance()},
+        {'(', OpeningBracket::getInstance()},
+        {')', ClosingBracket::getInstance()},
+        {'{', OpeningCurlyBracket::getInstance()},
+        {'}', ClosingCurlyBracket::getInstance()},
+};
+
+Token *Token::get(char symbol) {
+    if (!isNonOperatorToken(symbol)) {
+        throw invalid_argument("Unknown token: " + string(1, symbol));
+    }
+
+    return tokenMap->at(symbol);
+}
+

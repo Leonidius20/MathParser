@@ -19,8 +19,15 @@ enum TokenType {
 };
 
 class Token {
+    static std::map<char, Token *> *tokenMap;
 public:
     [[nodiscard]] virtual TokenType getType() const = 0;
+
+    static Token *get(char symbol);
+
+    static bool isNonOperatorToken(char symbol) { return tokenMap->contains(symbol); }
+
+    static void destroyMap() { delete tokenMap; };
 };
 
 class MathToken : public Token {
