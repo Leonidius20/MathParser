@@ -35,7 +35,7 @@ class Parser {
     std::vector<Token *> tokens;
     unsigned offset = 0;
 
-    void eatToken(Token::TokenType type);
+    void eatToken(Token::Type type);
 
     Operator *eatOperator(int precedence);
 

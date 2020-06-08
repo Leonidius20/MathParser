@@ -7,7 +7,7 @@
 
 class TreeNode {
 public:
-    enum TreeNodeType {
+    enum Type {
         STATEMENT_LIST, OPERATOR, VARIABLE, CONSTANT, ASSIGNMENT, BRANCH
     };
 
@@ -19,7 +19,7 @@ public:
 
     virtual void replaceChild(TreeNode *value, TreeNode *replacement) = 0;
 
-    [[nodiscard]] virtual TreeNodeType getType() const = 0;
+    [[nodiscard]] virtual Type getType() const = 0;
 };
 
 class StatementListNode : public TreeNode {
@@ -40,7 +40,7 @@ public:
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
-    [[nodiscard]] TreeNodeType getType() const override {
+    [[nodiscard]] Type getType() const override {
         return STATEMENT_LIST;
     }
 };
@@ -64,14 +64,13 @@ public:
     ~OperatorNode() override {
         delete left;
         delete right;
-        delete oper;
     }
 
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
-    [[nodiscard]] TreeNodeType getType() const override {
+    [[nodiscard]] Type getType() const override {
         return OPERATOR;
     }
 };
@@ -90,7 +89,7 @@ public:
         throw std::invalid_argument("VariableNode doesn't have any children.");
     }
 
-    [[nodiscard]] TreeNodeType getType() const override {
+    [[nodiscard]] Type getType() const override {
         return VARIABLE;
     }
 };
@@ -111,7 +110,7 @@ public:
         throw std::invalid_argument("ConstantNode doesn't have any children.");
     }
 
-    [[nodiscard]] TreeNodeType getType() const override {
+    [[nodiscard]] Type getType() const override {
         return CONSTANT;
     }
 };
@@ -136,7 +135,7 @@ public:
         return false;
     }
 
-    [[nodiscard]] TreeNodeType getType() const override {
+    [[nodiscard]] Type getType() const override {
         return ASSIGNMENT;
     }
 };
@@ -164,7 +163,7 @@ public:
         return false;
     }
 
-    [[nodiscard]] TreeNodeType getType() const override {
+    [[nodiscard]] Type getType() const override {
         return BRANCH;
     }
 };
