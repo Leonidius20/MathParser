@@ -6,7 +6,9 @@
 class Token {
 public:
     virtual bool isOperator() = 0;
+
     virtual bool isNumber() = 0;
+
     virtual ~Token() = default;
 };
 
@@ -45,7 +47,9 @@ public:
 
     [[nodiscard]] int getPrecedence() const { return precedence; }
 
-    double apply(double a, double b);
+    [[nodiscard]] char getSignature() const { return signature; }
+
+    [[nodiscard]] double apply(double a, double b) const;
 
     static void destroyMap() { delete operatorMap; }
 

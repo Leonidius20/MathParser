@@ -4,7 +4,7 @@
 
 using namespace std;
 
-double Operator::apply(double a, double b) {
+double Operator::apply(double a, double b) const {
     if (signature == '+') {
         return a + b;
     } else if (signature == '-') {
@@ -20,7 +20,7 @@ double Operator::apply(double a, double b) {
     }
 }
 
-map<char, Operator> *Operator::operatorMap = new map<char, Operator> {
+map<char, Operator> *Operator::operatorMap = new map<char, Operator>{
         {'+', Operator(1, '+')},
         {'-', Operator(1, '-')},
         {'*', Operator(2, '*')},
