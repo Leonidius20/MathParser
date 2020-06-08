@@ -6,11 +6,13 @@
 #include "visitor.h"
 
 enum TreeNodeType {
-    statement, operatorNode, variable, constant, assignment, branch
+    STATEMENT_LIST, OPERATOR, VARIABLE, CONSTANT, ASSIGNMENT, BRANCH
 };
 
 class TreeNode {
 public:
+    virtual ~TreeNode() = default;
+
     virtual double accept(Visitor *visitor) = 0;
 
     [[nodiscard]] virtual bool isExpression() const = 0;
@@ -24,6 +26,12 @@ class StatementListNode : public TreeNode {
 public:
     std::vector<TreeNode *> statements;
 
+    ~StatementListNode() override {
+        for (auto *statement : statements) {
+            delete statement;
+        }
+    }
+
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     [[nodiscard]] bool isExpression() const override {
@@ -33,7 +41,7 @@ public:
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return statement;
+        return STATEMENT_LIST;
     }
 };
 
@@ -53,12 +61,18 @@ public:
     OperatorNode(Operator *oper, ExpressionNode *left, ExpressionNode *right) :
             oper(oper), left(left), right(right) {};
 
+    ~OperatorNode() override {
+        delete left;
+        delete right;
+        delete oper;
+    }
+
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return operatorNode;
+        return OPERATOR;
     }
 };
 
@@ -68,6 +82,8 @@ public:
 
     explicit VariableNode(std::string name) : name(std::move(name)) {};
 
+    ~VariableNode() override = default;
+
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     void replaceChild(TreeNode *value, TreeNode *replacement) override {
@@ -75,7 +91,7 @@ public:
     }
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return variable;
+        return VARIABLE;
     }
 };
 
@@ -85,6 +101,10 @@ public:
 
     explicit ConstantNode(const Number *value) : value(value) {};
 
+    ~ConstantNode() override {
+        delete value;
+    };
+
     double accept(Visitor *visitor) override { return visitor->visit(this); };
 
     void replaceChild(TreeNode *node, TreeNode *replacement) override {
@@ -92,7 +112,7 @@ public:
     }
 
     [[nodiscard]] TreeNodeType getType() const override {
-        return constant;
+        return CONSTANT;
     }
 };
 
@@ -103,16 +123,21 @@ public:
 
     AssignmentNode(VariableNode *variable, ExpressionNode *expression) : variable(variable), expression(expression) {}
 
+    ~AssignmentNode() override {
+        delete variable;
+        delete expression;
+    };
+
     double accept(Visitor *visitor) override { return visitor->visit(this); };
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
     [[nodiscard]] bool isExpression() const override {
         return false;
     }
 
-    void replaceChild(TreeNode *value, TreeNode *replacement) override;
-
     [[nodiscard]] TreeNodeType getType() const override {
-        return assignment;
+        return ASSIGNMENT;
     }
 };
 
@@ -125,15 +150,21 @@ public:
     BranchNode(ExpressionNode *condition, StatementListNode *ifTrue, StatementListNode *ifFalse) :
             condition(condition), ifTrue(ifTrue), ifFalse(ifFalse) {}
 
+    ~BranchNode() override {
+        delete condition;
+        delete ifTrue;
+        delete ifFalse;
+    };
+
     double accept(Visitor *visitor) override { return visitor->visit(this); };
+
+    void replaceChild(TreeNode *value, TreeNode *replacement) override;
 
     [[nodiscard]] bool isExpression() const override {
         return false;
     }
 
-    void replaceChild(TreeNode *value, TreeNode *replacement) override;
-
     [[nodiscard]] TreeNodeType getType() const override {
-        return branch;
+        return BRANCH;
     }
 };

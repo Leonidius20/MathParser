@@ -23,23 +23,21 @@ class Token {
 public:
     [[nodiscard]] virtual TokenType getType() const = 0;
 
+    virtual bool isOperator() = 0;
+
+    virtual bool isNumber() = 0;
+
     static Token *get(char symbol);
 
     static bool isNonOperatorToken(char symbol) { return tokenMap->contains(symbol); }
 
     static void destroyMap() { delete tokenMap; };
+
+    virtual ~Token() = default;
 };
 
-class MathToken : public Token {
-public:
-    virtual bool isOperator() = 0;
-
-    virtual bool isNumber() = 0;
-
-    virtual ~MathToken() = default;
-};
-
-class Number : public MathToken {
+class Number : public Token {
+private:
     const double value;
 public:
     explicit Number(double value) : value(value) {}
@@ -55,7 +53,8 @@ public:
     ~Number() override = default;
 };
 
-class Operator : public MathToken {
+class Operator : public Token {
+private:
     const int precedence;
     const char signature;
     static std::map<char, Operator> *operatorMap;
@@ -73,6 +72,8 @@ public:
 
     [[nodiscard]] int getPrecedence() const { return precedence; }
 
+    [[nodiscard]] char getSignature() const { return signature; }
+
     [[nodiscard]] double apply(double a, double b) const;
 
     [[nodiscard]] TokenType getType() const override { return TokenType::OPERATOR; };
@@ -82,7 +83,8 @@ public:
     ~Operator() override = default;
 };
 
-class OpeningBracket : public MathToken {
+class OpeningBracket : public Token {
+private:
     static OpeningBracket *instance;
 
     OpeningBracket() = default;
