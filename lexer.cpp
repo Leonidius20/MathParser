@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <stdexcept>
 #include "token.h"
 #include "lexer.h"
 
@@ -53,6 +54,8 @@ vector<Token *> Lexer::tokenize() {
             output.push_back(Operator::get(c));
         } else if (Token::isNonOperatorToken(c)) {
             output.push_back(Token::get(c));
+        } else {
+            throw invalid_argument("Unrecognized symbol during tokenizing");
         }
     }
 
