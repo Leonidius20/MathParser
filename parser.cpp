@@ -1,11 +1,14 @@
 #include <string>
 #include <stdexcept>
+#include "token.h"
 #include "parser.h"
 
 using namespace std;
 
-StatementListNode *Parser::parse() {
-    return parseStatementList();
+using TokenType = Token::TokenType;
+
+Tree Parser::parse() {
+    return Tree(parseStatementList());
 }
 
 void Parser::eatToken(TokenType type) {
@@ -212,7 +215,7 @@ BranchNode *Parser::parseBranch() {
     auto ifTrue = parseStatementBlock();
     StatementListNode *ifFalse = nullptr;
     if (offset < tokens.size() && tokens[offset]->getType() == TokenType::ELSE_TOKEN) {
-        eatToken(ELSE_TOKEN);
+        eatToken(TokenType::ELSE_TOKEN);
         ifFalse = parseStatementBlock();
     }
     return new BranchNode(condition, ifTrue, ifFalse);

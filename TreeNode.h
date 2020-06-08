@@ -5,12 +5,12 @@
 #include "token.h"
 #include "visitor.h"
 
-enum TreeNodeType {
-    STATEMENT_LIST, OPERATOR, VARIABLE, CONSTANT, ASSIGNMENT, BRANCH
-};
-
 class TreeNode {
 public:
+    enum TreeNodeType {
+        STATEMENT_LIST, OPERATOR, VARIABLE, CONSTANT, ASSIGNMENT, BRANCH
+    };
+
     virtual ~TreeNode() = default;
 
     virtual double accept(Visitor *visitor) = 0;

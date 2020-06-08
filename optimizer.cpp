@@ -1,6 +1,8 @@
 #include "optimizer.h"
 #include "TreeNode.h"
 
+using TreeNodeType = TreeNode::TreeNodeType;
+
 double OptimizationVisitor::visit(StatementListNode *node) {
     stack.push(node);
 
@@ -37,7 +39,7 @@ double OptimizationVisitor::visit(OperatorNode *node) {
     char signature = node->oper->getSignature();
 
     // Try optimize right first because `0^0 = 1`
-    if (node->right->getType() == CONSTANT) {
+    if (node->right->getType() == TreeNodeType::CONSTANT) {
         auto value = dynamic_cast<ConstantNode *>(node->right)->value->getValue();
 
         if (value == 0) {
@@ -80,7 +82,7 @@ double OptimizationVisitor::visit(OperatorNode *node) {
                     break;
             }
         }
-    } else if (node->left->getType() == CONSTANT) {
+    } else if (node->left->getType() == TreeNodeType::CONSTANT) {
         auto value = dynamic_cast<ConstantNode *>(node->left)->value->getValue();
 
         if (value == 0) {
@@ -147,7 +149,7 @@ double OptimizationVisitor::visit(BranchNode *node) {
         node->ifFalse->accept(this);
     }
 
-    if (node->condition->getType() == CONSTANT) {
+    if (node->condition->getType() == TreeNodeType::CONSTANT) {
         auto value = dynamic_cast<ConstantNode *>(node->condition)->value->getValue();
         if (isTrue(value)) {
             parent->replaceChild(node, node->ifTrue);

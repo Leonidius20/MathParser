@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
 
     auto tokens = Lexer(expression).tokenize();
     auto tree = Parser(tokens).parse();
-    // OptimizationVisitor().visit(tree);
-    // auto value = ExpressionEvaluatorVisitor().visit(tree);
+    tree.optimize();
+    tree.evaluate();
 
     Operator::destroyMap();
     Token::destroyMap();

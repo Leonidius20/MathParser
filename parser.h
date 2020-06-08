@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "Tree.h"
 #include "TreeNode.h"
 #include "token.h"
 
@@ -34,7 +35,7 @@ class Parser {
     std::vector<Token *> tokens;
     unsigned offset = 0;
 
-    void eatToken(TokenType type);
+    void eatToken(Token::TokenType type);
 
     Operator *eatOperator(int precedence);
 
@@ -61,5 +62,5 @@ class Parser {
 public:
     explicit Parser(std::vector<Token *> tokens) : tokens(std::move(tokens)) {}
 
-    StatementListNode *parse();
+    Tree parse();
 };

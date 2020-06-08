@@ -4,28 +4,26 @@
 #include <map>
 #include <utility>
 
-enum TokenType {
-    NUMBER,                  // 0
-    IDENTIFIER,              // 1
-    OPERATOR,                // 2
-    OPENING_BRACKET,         // 3
-    CLOSING_BRACKET,         // 4
-    ASSIGNMENT,              // 5
-    OPENING_CURLY_BRACKET,   // 6
-    CLOSING_CURLY_BRACKET,   // 7
-    SEMICOLON,               // 8
-    IF_TOKEN,                // 9
-    ELSE_TOKEN,              // 10
-};
-
 class Token {
     static std::map<char, Token *> *tokenMap;
+
 public:
+
+    enum TokenType {
+        NUMBER,                  // 0
+        IDENTIFIER,              // 1
+        OPERATOR,                // 2
+        OPENING_BRACKET,         // 3
+        CLOSING_BRACKET,         // 4
+        ASSIGNMENT,              // 5
+        OPENING_CURLY_BRACKET,   // 6
+        CLOSING_CURLY_BRACKET,   // 7
+        SEMICOLON,               // 8
+        IF_TOKEN,                // 9
+        ELSE_TOKEN,              // 10
+    };
+
     [[nodiscard]] virtual TokenType getType() const = 0;
-
-    virtual bool isOperator() = 0;
-
-    virtual bool isNumber() = 0;
 
     static Token *get(char symbol);
 
@@ -37,16 +35,13 @@ public:
 };
 
 class Number : public Token {
-private:
     const double value;
+
 public:
+
     explicit Number(double value) : value(value) {}
 
     [[nodiscard]] double getValue() const { return value; };
-
-    bool isOperator() override { return false; };
-
-    bool isNumber() override { return true; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::NUMBER; };
 
@@ -54,21 +49,17 @@ public:
 };
 
 class Operator : public Token {
-private:
     const int precedence;
     const char signature;
     static std::map<char, Operator> *operatorMap;
 
 public:
+
     Operator(const int precedence, char signature) : precedence(precedence), signature(signature) {}
 
     static Operator *get(char signature);
 
     static bool isOperator(char signature) { return operatorMap->contains(signature); }
-
-    bool isOperator() override { return true; };
-
-    bool isNumber() override { return false; };
 
     [[nodiscard]] int getPrecedence() const { return precedence; }
 
@@ -84,16 +75,11 @@ public:
 };
 
 class OpeningBracket : public Token {
-private:
     static OpeningBracket *instance;
 
     OpeningBracket() = default;
 
 public:
-
-    bool isOperator() override { return false; };
-
-    bool isNumber() override { return false; };
 
     static OpeningBracket *getInstance() { return instance; };
 
@@ -102,7 +88,9 @@ public:
 
 class ClosingBracket : public Token {
     static ClosingBracket *instance;
+
 public:
+
     static ClosingBracket *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::CLOSING_BRACKET; };
@@ -110,7 +98,9 @@ public:
 
 class Identifier : public Token {
     std::string name;
+
 public:
+
     explicit Identifier(std::string name) : name(std::move(name)) {};
 
     [[nodiscard]] std::string getName() const { return name; };
@@ -120,7 +110,9 @@ public:
 
 class Assignment : public Token {
     static Assignment *instance;
+
 public:
+
     static Assignment *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::ASSIGNMENT; };
@@ -128,7 +120,9 @@ public:
 
 class IfToken : public Token {
     static IfToken *instance;
+
 public:
+
     static IfToken *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::IF_TOKEN; };
@@ -136,7 +130,9 @@ public:
 
 class ElseToken : public Token {
     static ElseToken *instance;
+
 public:
+
     static ElseToken *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::ELSE_TOKEN; };
@@ -144,7 +140,9 @@ public:
 
 class OpeningCurlyBracket : public Token {
     static OpeningCurlyBracket *instance;
+
 public:
+
     static OpeningCurlyBracket *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::OPENING_CURLY_BRACKET; };
@@ -152,7 +150,9 @@ public:
 
 class ClosingCurlyBracket : public Token {
     static ClosingCurlyBracket *instance;
+
 public:
+
     static ClosingCurlyBracket *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::CLOSING_CURLY_BRACKET; };
@@ -160,7 +160,9 @@ public:
 
 class Semicolon : public Token {
     static Semicolon *instance;
+
 public:
+
     static Semicolon *getInstance() { return instance; };
 
     [[nodiscard]] TokenType getType() const override { return TokenType::SEMICOLON; };
