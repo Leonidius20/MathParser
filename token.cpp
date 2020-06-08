@@ -61,3 +61,15 @@ Token *Token::get(char symbol) {
     return tokenMap->at(symbol);
 }
 
+void Token::destroyMap() {
+    delete tokenMap;
+    delete OpeningBracket::getInstance();
+    delete ClosingBracket::getInstance();
+    delete Assignment::getInstance();
+    delete IfToken::getInstance();
+    delete ElseToken::getInstance();
+    delete OpeningCurlyBracket::getInstance();
+    delete ClosingCurlyBracket::getInstance();
+    delete Semicolon::getInstance();
+}
+

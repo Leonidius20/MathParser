@@ -29,7 +29,7 @@ public:
 
     static bool isNonOperatorToken(char symbol) { return tokenMap->contains(symbol); }
 
-    static void destroyMap() { delete tokenMap; };
+    static void destroyMap();
 
     virtual ~Token() = default;
 };
