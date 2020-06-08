@@ -1,32 +1,36 @@
 #include <iostream>
 #include <string>
-#include "shunting_yard.h"
-#include "token.h"
-#include "calculator.h"
+#include <fstream>
+#include "lexer.h"
+#include "parser.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        cerr << "Arithmetic expression is not specified" << endl;
+        cerr << "File to read not specified" << endl;
         return 0;
     }
 
-    string expression;
-    for (int i = 1; i < argc; i++) {
-        expression.append(argv[i]);
+    string file = argv[1];
+    ifstream stream(file);
+    if (!stream.is_open()) {
+        cerr << "Could not read the file provided" << endl;
+        return 0;
     }
 
+    string line, expression;
+    while (getline(stream, line)) expression.append(line);
+
     try {
-        auto tokens = parse(expression);
-        double result = compute(tokens);
-        for (auto token : tokens) {
-            if (token->isNumber()) delete token;
-        }
-        cout << result << endl;
-    } catch (const exception& e) {
-        cerr << "Error: " << e.what() << endl;
+        auto tokens = Lexer(expression).tokenize();
+        auto tree = Parser(tokens).parse();
+        tree.optimize();
+        tree.evaluate();
+    } catch (const invalid_argument &e) {
+        cerr << e.what() << endl;
     }
 
     Operator::destroyMap();
+    Token::destroyMap();
 }

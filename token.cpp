@@ -30,9 +30,46 @@ map<char, Operator> *Operator::operatorMap = new map<char, Operator>{
 
 Operator *Operator::get(char signature) {
     if (!isOperator(signature)) {
-        throw invalid_argument("Unknown operator: " + to_string(signature));
+        throw invalid_argument("Unknown operator: " + string(1, signature));
     }
     return &operatorMap->at(signature);
 }
 
 OpeningBracket *OpeningBracket::instance = new OpeningBracket();
+ClosingBracket *ClosingBracket::instance = new ClosingBracket();
+Assignment *Assignment::instance = new Assignment();
+IfToken *IfToken::instance = new IfToken();
+ElseToken *ElseToken::instance = new ElseToken();
+OpeningCurlyBracket *OpeningCurlyBracket::instance = new OpeningCurlyBracket();
+ClosingCurlyBracket *ClosingCurlyBracket::instance = new ClosingCurlyBracket();
+Semicolon *Semicolon::instance = new Semicolon();
+
+map<char, Token *> *Token::tokenMap = new map<char, Token *>{
+        {'=', Assignment::getInstance()},
+        {';', Semicolon::getInstance()},
+        {'(', OpeningBracket::getInstance()},
+        {')', ClosingBracket::getInstance()},
+        {'{', OpeningCurlyBracket::getInstance()},
+        {'}', ClosingCurlyBracket::getInstance()},
+};
+
+Token *Token::get(char symbol) {
+    if (!isNonOperatorToken(symbol)) {
+        throw invalid_argument("Unknown token: " + string(1, symbol));
+    }
+
+    return tokenMap->at(symbol);
+}
+
+void Token::destroyMap() {
+    delete tokenMap;
+    delete OpeningBracket::getInstance();
+    delete ClosingBracket::getInstance();
+    delete Assignment::getInstance();
+    delete IfToken::getInstance();
+    delete ElseToken::getInstance();
+    delete OpeningCurlyBracket::getInstance();
+    delete ClosingCurlyBracket::getInstance();
+    delete Semicolon::getInstance();
+}
+

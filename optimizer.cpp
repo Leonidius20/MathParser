@@ -37,7 +37,7 @@ double OptimizationVisitor::visit(OperatorNode *node) {
     char signature = node->oper->getSignature();
 
     // Try optimize right first because `0^0 = 1`
-    if (node->right->getType() == CONSTANT) {
+    if (node->right->getType() == TreeNode::Type::CONSTANT) {
         auto value = dynamic_cast<ConstantNode *>(node->right)->value->getValue();
 
         if (value == 0) {
@@ -80,7 +80,7 @@ double OptimizationVisitor::visit(OperatorNode *node) {
                     break;
             }
         }
-    } else if (node->left->getType() == CONSTANT) {
+    } else if (node->left->getType() == TreeNode::Type::CONSTANT) {
         auto value = dynamic_cast<ConstantNode *>(node->left)->value->getValue();
 
         if (value == 0) {
@@ -95,9 +95,8 @@ double OptimizationVisitor::visit(OperatorNode *node) {
                     break;
                 }
 
-                    // 0 [+-] expression -> expression
+                // 0 [+] expression -> expression
                 case '+':
-                case '-':
                     parent->replaceChild(node, node->right);
                     node->right = nullptr;
                     delete node;
@@ -147,7 +146,7 @@ double OptimizationVisitor::visit(BranchNode *node) {
         node->ifFalse->accept(this);
     }
 
-    if (node->condition->getType() == CONSTANT) {
+    if (node->condition->getType() == TreeNode::Type::CONSTANT) {
         auto value = dynamic_cast<ConstantNode *>(node->condition)->value->getValue();
         if (isTrue(value)) {
             parent->replaceChild(node, node->ifTrue);
